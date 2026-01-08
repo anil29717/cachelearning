@@ -384,8 +384,25 @@ export function Navbar() {
 
             {/* Right-side links */}
             <div className="flex items-center gap-4">
-              <Link to="#" className="text-sm text-gray-700 hover:text-red-700">For Business</Link>
-              <Link to="#" className="text-sm text-gray-700 hover:text-red-700">Resources</Link>
+              {/* <Link to="#" className="text-sm text-gray-700 hover:text-red-700">For Business</Link> */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="text-sm text-gray-700 hover:text-red-700">
+                    Training <ChevronDown className="h-4 w-4 ml-1" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56">
+                  <DropdownMenuItem onClick={() => navigate('/training#students')}>
+                    Students
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/training#professionals')}>
+                    Professionals
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/training#corporate')}>
+                    Corporate
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="text-sm text-gray-700 hover:text-red-700">
@@ -502,6 +519,21 @@ export function Navbar() {
               <Button variant="ghost" className="w-full justify-start">
                 <Home className="h-4 w-4 mr-2" />
                 Home
+              </Button>
+            </Link>
+            <Link to="/training#students" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start">
+                Students
+              </Button>
+            </Link>
+            <Link to="/training#professionals" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start">
+                Professionals
+              </Button>
+            </Link>
+            <Link to="/training#corporate" onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start">
+                Corporate
               </Button>
             </Link>
 

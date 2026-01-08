@@ -23,6 +23,7 @@ import BlogDetailPage from './pages/BlogDetailPage';
 import { AboutPage } from './pages/AboutPage';
 import { Footer } from './components/Footer';
 import { CourseListingPage } from './pages/CourseListingPage';
+import TrainingPage from './pages/TrainingPage';
 
 import { Toaster } from './components/ui/sonner';
 // Payment gateway removed: SetupRequiredBanner and ConfigDebugPage no longer used
@@ -92,6 +93,7 @@ export default function App() {
               <Route path="/blog/:id" element={<BlogDetailPage />} />
               
               <Route path="/courses" element={<CourseListingPage />} />
+              <Route path="/training" element={<TrainingPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
