@@ -4,7 +4,6 @@ import { apiClient } from '../utils/api';
 import { Course } from '../types';
 import HeroCarousel from '../components/HeroCarousel';
 import { CourseExplorerSection } from '../components/CourseExplorerSection';
-import { Button } from '../components/ui/button';
 import { Globe, Handshake, Layers, Star, Users, Award, Briefcase, CheckCircle2 } from 'lucide-react';
  
 
@@ -51,10 +50,10 @@ export function HomePage() {
   ];
 
   const trustMetrics = [
-    { label: 'Learners', value: '50,000+', icon: Users },
-    { label: 'Star rating', value: '4.8', icon: Star },
-    { label: 'Hiring partners', value: '100+', icon: Handshake },
-    { label: 'Countries', value: '20+', icon: Globe },
+    { label: 'Learners', value: '50,000+', caption: 'Learners worldwide', icon: Users },
+    { label: 'Star rating', value: '4.8', caption: 'Average learner rating', icon: Star },
+    { label: 'Hiring partners', value: '100+', caption: 'Companies hiring our learners', icon: Handshake },
+    { label: 'Countries', value: '20+', caption: 'Learners across regions', icon: Globe },
   ];
 
   const categories = [
@@ -186,42 +185,31 @@ export function HomePage() {
               <div className="relative px-6 py-10 sm:px-10">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-50 via-white to-white"></div>
                 <div className="relative">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-medium text-slate-700">
-                    Trusted outcomes
-                  </div>
-                  <div className="mt-4 max-w-3xl">
-                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
-                      Trusted by learners and teams worldwide
-                    </h2>
-                    <p className="mt-2 text-slate-600 leading-7">
-                      Proven learning impact with mentorship, practical labs, and career-ready programs.
-                    </p>
-                    <div className="mt-4 flex flex-wrap gap-3">
-                      <Button onClick={() => navigate('/courses')}>Explore Courses</Button>
-                      <Button variant="outline" onClick={() => navigate('/contact')}>Talk to Us</Button>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     {trustMetrics.map((m) => {
                       const Icon = m.icon;
                       return (
                         <div
                           key={m.label}
-                          className="rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-sm"
+                          className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg hover:border-red-200"
                         >
-                          <div className="flex items-center gap-2 text-slate-600">
-                            <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50">
-                              <Icon className="h-4 w-4 text-slate-700" />
+                          <div className="flex items-center gap-3 text-slate-700">
+                            <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50">
+                              <Icon className="h-5 w-5 text-slate-800" />
                             </span>
-                            <span className="text-xs font-medium tracking-wide uppercase">{m.label}</span>
+                            <div className="flex flex-col">
+                              <span className="text-[11px] font-semibold tracking-[0.14em] uppercase text-slate-500">
+                                {m.label}
+                              </span>
+                              <span className="text-xs text-slate-500">{m.caption}</span>
+                            </div>
                           </div>
-                          <div className="mt-4 flex items-end justify-between">
+                          <div className="mt-4 flex items-baseline justify-between">
                             <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
                               {m.value}
                             </span>
                             {m.label === 'Star rating' && (
-                              <span className="text-xs font-medium text-slate-600">out of 5</span>
+                              <span className="text-[11px] font-medium text-slate-500">out of 5</span>
                             )}
                           </div>
                         </div>
