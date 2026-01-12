@@ -28,7 +28,16 @@ export const CourseExplorerSection: React.FC<CourseExplorerSectionProps> = ({
 
   // Tabs with 'All' for showing all courses
   const categoryTabs =
-    categories ?? ['All', 'Cloud', 'Cyber Security', 'Data Analytics & AI', 'Networking'];
+    categories ?? [
+      'All',
+      'Artificial Intelligence & Machine Learning',
+      'Cloud Computing',
+      'Cybersecurity',
+      'Data Analytics & AI',
+      'Networking',
+      'DevOps',
+      'Full Stack Development',
+    ];
 
   const handleTabClick = (label: string) => {
     const category = label;

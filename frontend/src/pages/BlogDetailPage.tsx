@@ -36,12 +36,11 @@ export function BlogDetailPage() {
     try {
       const result = await apiClient.likeBlog(blog.id);
       setBlog(prev => prev ? { ...prev, like_count: result.like_count, is_liked: result.liked } : null);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to like blog', err);
       // If unauthorized, redirect to login
-      if (err?.message?.includes('401') || err?.message?.includes('Unauthorized')) {
-         navigate('/login');
-      }
+      const msg = err instanceof Error ? err.message : '';
+      if (msg.includes('401') || msg.includes('Unauthorized')) navigate('/login');
     }
   };
 
@@ -116,8 +115,8 @@ export function BlogDetailPage() {
       <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gray-50">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">Blog Post Not Found</h2>
         <p className="text-gray-600 mb-6">{error || "The blog post you're looking for doesn't exist."}</p>
-        <Button onClick={() => navigate('/blog')} variant="red">
-          <ArrowLeft className="mr-2 h-4 w-4 bg-none" /> 
+        <Button onClick={() => navigate('/blog')} variant="outline">
+          <ArrowLeft className="mr-2 h-4 w-4 bg-none" />
         </Button>
       </div>
     );
@@ -135,7 +134,7 @@ export function BlogDetailPage() {
               {/* Back Button */}
               <div className="mb-6">
                  <Button 
-                  variant="red" 
+                  variant="ghost" 
                   className="pl-0 hover:pl-2 transition-all text-red-600 hover:text-red-900"
                   onClick={() => navigate('/blog')}
                 >

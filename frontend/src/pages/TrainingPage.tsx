@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
-import { GraduationCap, Briefcase, Building, Laptop, Users } from 'lucide-react';
+import { GraduationCap, Briefcase, Building, Laptop, Users, Star, Handshake, Globe } from 'lucide-react';
 
 export default function TrainingPage() {
   const location = useLocation();
@@ -17,6 +17,13 @@ export default function TrainingPage() {
   const go = (anchor: string) => {
     navigate(`/training#${anchor}`);
   };
+
+  const trustMetrics = [
+    { label: 'Learners', value: '50,000+', icon: Users },
+    { label: 'Star rating', value: '4.8', icon: Star },
+    { label: 'Hiring partners', value: '100+', icon: Handshake },
+    { label: 'Countries', value: '20+', icon: Globe },
+  ];
 
   return (
     <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-white to-slate-100">
@@ -35,6 +42,56 @@ export default function TrainingPage() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 py-12 space-y-20">
+        <section className="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+          <div className="relative px-6 py-10 sm:px-10">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-red-50 via-white to-white"></div>
+            <div className="relative">
+              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-3 py-1 text-xs font-medium text-slate-700">
+                Trusted outcomes
+              </div>
+              <div className="mt-4 max-w-3xl">
+                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900">
+                  Trusted by learners and teams worldwide
+                </h2>
+                <p className="mt-2 text-slate-600 leading-7">
+                  Proven learning impact with mentorship, practical labs, and career-ready programs.
+                </p>
+                <div className="mt-4 flex flex-wrap gap-3">
+                  <Button onClick={() => navigate('/courses')}>Explore Courses</Button>
+                  <Button variant="outline" onClick={() => navigate('/contact')}>Talk to Us</Button>
+                </div>
+              </div>
+
+              <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                {trustMetrics.map((m) => {
+                  const Icon = m.icon;
+                  return (
+                    <div
+                      key={m.label}
+                      className="rounded-2xl border border-slate-200 bg-white/80 p-5 shadow-sm"
+                    >
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50">
+                          <Icon className="h-4 w-4 text-slate-700" />
+                        </span>
+                        <span className="text-xs font-medium tracking-wide uppercase">{m.label}</span>
+                      </div>
+                      <div className="mt-4 flex items-end justify-between">
+                        <span className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
+                          {m.value}
+                        </span>
+                        {m.label === 'Star rating' && (
+                          <span className="text-xs font-medium text-slate-600">out of 5</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section id="students" className="scroll-mt-24">
           <div className="flex items-center gap-3 mb-8">
             <GraduationCap className="h-7 w-7 text-red-600" />

@@ -11,9 +11,6 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuSub,
-  DropdownMenuSubTrigger,
-  DropdownMenuSubContent,
 } from './ui/dropdown-menu';
 import { apiClient } from '../utils/api';
 import { Course } from '../types';
@@ -53,28 +50,25 @@ export function Navbar() {
     }
     const categoryMap: Record<string, string> = {
       'all': 'All',
-      'cloud': 'Cloud',
-      'cyber security': 'Cyber Security',
+      'ai': 'Artificial Intelligence & Machine Learning',
+      'ml': 'Artificial Intelligence & Machine Learning',
+      'machine learning': 'Artificial Intelligence & Machine Learning',
+      'artificial intelligence': 'Artificial Intelligence & Machine Learning',
+      'cloud': 'Cloud Computing',
+      'cloud computing': 'Cloud Computing',
+      'cyber': 'Cybersecurity',
+      'cyber security': 'Cybersecurity',
+      'cybersecurity': 'Cybersecurity',
+      'data': 'Data Analytics & AI',
+      'data analytics': 'Data Analytics & AI',
       'data analytics & ai': 'Data Analytics & AI',
+      'analytics': 'Data Analytics & AI',
       'networking': 'Networking',
-    };
-    const subCategoryMap: Record<string, { category: string; term: string }> = {
-      'cloud foundations': { category: 'Cloud', term: 'Cloud Foundations' },
-      'cloud infrastructure': { category: 'Cloud', term: 'Cloud Infrastructure' },
-      'cloud security & networking': { category: 'Cloud', term: 'Cloud Security & Networking' },
-      'devops & automation': { category: 'Cloud', term: 'DevOps & Automation' },
-      'security foundations': { category: 'Cyber Security', term: 'Security Foundations' },
-      'network & cloud security': { category: 'Cyber Security', term: 'Network & Cloud Security' },
-      'threat protection': { category: 'Cyber Security', term: 'Threat Protection' },
-      'governance & incident response': { category: 'Cyber Security', term: 'Governance & Incident Response' },
-      'data processing': { category: 'Data Analytics & AI', term: 'Data Processing' },
-      'data visualization & bi': { category: 'Data Analytics & AI', term: 'Data Visualization & BI' },
-      'machine & deep learning': { category: 'Data Analytics & AI', term: 'Machine & Deep Learning' },
-      'generative ai': { category: 'Data Analytics & AI', term: 'Generative AI' },
-      'network basics': { category: 'Networking', term: 'Network Basics' },
-      'network infrastructure': { category: 'Networking', term: 'Network Infrastructure' },
-      'network security': { category: 'Networking', term: 'Network Security' },
-      'network automation & monitoring': { category: 'Networking', term: 'Network Automation & Monitoring' },
+      'network': 'Networking',
+      'ccna': 'Networking',
+      'devops': 'DevOps',
+      'full stack': 'Full Stack Development',
+      'full stack development': 'Full Stack Development',
     };
     const routeAliases: Record<string, string> = {
       'home': '/',
@@ -109,9 +103,6 @@ export function Navbar() {
     Object.values(categoryMap)
       .filter(v => v.toLowerCase().includes(q))
       .forEach(v => s.push({ label: v, onClick: () => navigate(`/courses?${new URLSearchParams({ category: v }).toString()}`) }));
-    Object.values(subCategoryMap)
-      .filter(v => v.term.toLowerCase().includes(q))
-      .forEach(v => s.push({ label: `${v.category} • ${v.term}`, onClick: () => navigate(`/courses?${new URLSearchParams({ category: v.category, subcategory: v.term, q: v.term }).toString()}`) }));
     Object.keys(routeAliases)
       .filter(k => k.includes(q))
       .forEach(k => s.push({ label: k, onClick: () => navigate(routeAliases[k]) }));
@@ -139,10 +130,18 @@ export function Navbar() {
     }
     const categoryMap: Record<string, string> = {
       'all': 'All',
-      'cloud': 'Cloud',
-      'cyber security': 'Cyber Security',
-      'data analytics & ai': 'Data Analytics & AI',
-      'networking': 'Networking',
+      'ai': 'Artificial Intelligence & Machine Learning',
+      'ml': 'Artificial Intelligence & Machine Learning',
+      'machine learning': 'Artificial Intelligence & Machine Learning',
+      'artificial intelligence': 'Artificial Intelligence & Machine Learning',
+      'cloud': 'Cloud Computing',
+      'cloud computing': 'Cloud Computing',
+      'cyber': 'Cybersecurity',
+      'cyber security': 'Cybersecurity',
+      'cybersecurity': 'Cybersecurity',
+      'devops': 'DevOps',
+      'full stack': 'Full Stack Development',
+      'full stack development': 'Full Stack Development',
     };
     if (categoryMap[q]) {
       const params = new URLSearchParams();
@@ -150,37 +149,7 @@ export function Navbar() {
       navigate(`/courses?${params.toString()}`);
       return;
     }
-    const subCategoryMap: Record<string, { category: string; term: string }> = {
-      // Cloud
-      'cloud foundations': { category: 'Cloud', term: 'Cloud Foundations' },
-      'cloud infrastructure': { category: 'Cloud', term: 'Cloud Infrastructure' },
-      'cloud security & networking': { category: 'Cloud', term: 'Cloud Security & Networking' },
-      'devops & automation': { category: 'Cloud', term: 'DevOps & Automation' },
-      // Cyber Security
-      'security foundations': { category: 'Cyber Security', term: 'Security Foundations' },
-      'network & cloud security': { category: 'Cyber Security', term: 'Network & Cloud Security' },
-      'threat protection': { category: 'Cyber Security', term: 'Threat Protection' },
-      'governance & incident response': { category: 'Cyber Security', term: 'Governance & Incident Response' },
-      // Data Analytics & AI
-      'data processing': { category: 'Data Analytics & AI', term: 'Data Processing' },
-      'data visualization & bi': { category: 'Data Analytics & AI', term: 'Data Visualization & BI' },
-      'machine & deep learning': { category: 'Data Analytics & AI', term: 'Machine & Deep Learning' },
-      'generative ai': { category: 'Data Analytics & AI', term: 'Generative AI' },
-      // Networking
-      'network basics': { category: 'Networking', term: 'Network Basics' },
-      'network infrastructure': { category: 'Networking', term: 'Network Infrastructure' },
-      'network security': { category: 'Networking', term: 'Network Security' },
-      'network automation & monitoring': { category: 'Networking', term: 'Network Automation & Monitoring' },
-    };
-    if (subCategoryMap[q]) {
-      const s = subCategoryMap[q];
-      const params = new URLSearchParams();
-      params.set('category', s.category);
-      params.set('subcategory', s.term);
-      params.set('q', s.term);
-      navigate(`/courses?${params.toString()}`);
-      return;
-    }
+    // reserved for future sub-category support
     const routeAliases: Record<string, string> = {
       'home': '/',
       'index': '/',
@@ -242,10 +211,9 @@ export function Navbar() {
     navigate(`/courses?q=${encodeURIComponent(raw)}`);
   };
 
-  const navigateTo = (category: string, sub?: string) => {
+  const navigateTo = (category: string) => {
     const params = new URLSearchParams();
     params.set('category', category);
-    if (sub) params.set('subcategory', sub);
     navigate(`/courses?${params.toString()}`);
   };
 
@@ -281,51 +249,15 @@ export function Navbar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-[320px] p-2 rounded-md border border-gray-200 bg-white shadow-sm">
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="font-medium text-gray-800 hover:bg-gray-50 px-2 py-2 rounded-md focus:bg-gray-100">Cloud</DropdownMenuSubTrigger>
-                    <DropdownMenuSubContent className="min-w-[240px] p-2 bg-white border border-gray-200 rounded-md shadow-sm">
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cloud', 'Cloud Foundations')}>Cloud Foundations</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cloud', 'Cloud Infrastructure')}>Cloud Infrastructure</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cloud', 'Cloud Security & Networking')}>Cloud Security & Networking</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cloud', 'DevOps & Automation')}>DevOps & Automation</DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuSub>
-
+                  <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigate('/courses')}>All Courses</DropdownMenuItem>
                   <DropdownMenuSeparator />
-
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="font-medium text-gray-800 hover:bg-gray-50 px-2 py-2 rounded-md focus:bg-gray-100">Cyber Security</DropdownMenuSubTrigger>
-                    <DropdownMenuSubContent className="min-w-[240px] p-2 bg-white border border-gray-200 rounded-md shadow-sm">
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cyber Security', 'Security Foundations')}>Security Foundations</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cyber Security', 'Network & Cloud Security')}>Network & Cloud Security</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cyber Security', 'Threat Protection')}>Threat Protection</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cyber Security', 'Governance & Incident Response')}>Governance & Incident Response</DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuSub>
-
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="font-medium text-gray-800 hover:bg-gray-50 px-2 py-2 rounded-md focus:bg-gray-100">Data Analytics & AI</DropdownMenuSubTrigger>
-                    <DropdownMenuSubContent className="min-w-[240px] p-2 bg-white border border-gray-200 rounded-md shadow-sm">
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Data Analytics & AI', 'Data Processing')}>Data Processing</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Data Analytics & AI', 'Data Visualization & BI')}>Data Visualization & BI</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Data Analytics & AI', 'Machine & Deep Learning')}>Machine & Deep Learning</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Data Analytics & AI', 'Generative AI')}>Generative AI</DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuSub>
-
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger className="font-medium text-gray-800 hover:bg-gray-50 px-2 py-2 rounded-md focus:bg-gray-100">Networking</DropdownMenuSubTrigger>
-                    <DropdownMenuSubContent className="min-w-[240px] p-2 bg-white border border-gray-200 rounded-md shadow-sm">
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Networking', 'Network Basics')}>Network Basics</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Networking', 'Network Infrastructure')}>Network Infrastructure</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Networking', 'Network Security')}>Network Security</DropdownMenuItem>
-                      <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Networking', 'Network Automation & Monitoring')}>Network Automation & Monitoring</DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuSub>
+                  <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Artificial Intelligence & Machine Learning')}>Artificial Intelligence & Machine Learning</DropdownMenuItem>
+                  <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cloud Computing')}>Cloud Computing</DropdownMenuItem>
+                  <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Cybersecurity')}>Cybersecurity</DropdownMenuItem>
+                  <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Data Analytics & AI')}>Data Analytics & AI</DropdownMenuItem>
+                  <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Networking')}>Networking</DropdownMenuItem>
+                  <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('DevOps')}>DevOps</DropdownMenuItem>
+                  <DropdownMenuItem className="text-sm px-2 py-2 text-gray-700 hover:bg-gray-50 rounded" onClick={() => navigateTo('Full Stack Development')}>Full Stack Development</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

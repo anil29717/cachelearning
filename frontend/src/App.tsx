@@ -92,6 +92,10 @@ export default function App() {
               <Route path="/blog" element={<BlogPage />} />
               <Route path="/blog/:id" element={<BlogDetailPage />} />
               
+              <Route path="/courses/cloud" element={<Navigate to="/courses?category=Cloud%20Computing" replace />} />
+              <Route path="/courses/cyber-security" element={<Navigate to="/courses?category=Cybersecurity" replace />} />
+              <Route path="/courses/data-analytics-ai" element={<Navigate to="/courses?category=Data%20Analytics%20%26%20AI" replace />} />
+              <Route path="/courses/networking" element={<Navigate to="/courses?category=Networking" replace />} />
               <Route path="/courses" element={<CourseListingPage />} />
               <Route path="/training" element={<TrainingPage />} />
               <Route path="/contact" element={<ContactPage />} />

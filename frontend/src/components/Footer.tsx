@@ -35,11 +35,11 @@ export function Footer() {
           <div>
             <h3 className="text-sm font-semibold text-red-600">Courses</h3>
             <ul className="mt-4 space-y-2 text-sm">
-              <li><Link to="/courses/ai-ml" className="text-gray-600 hover:text-red-700 transition">Artificial Intelligence & Machine Learning</Link></li>
-              <li><Link to="/courses/cloud" className="text-gray-600 hover:text-red-700 transition">Cloud Computing (AWS, Azure, GCP)</Link></li>
-              <li><Link to="/courses/cybersecurity" className="text-gray-600 hover:text-red-700 transition">Cybersecurity</Link></li>
-              <li><Link to="/courses/devops" className="text-gray-600 hover:text-red-700 transition">DevOps</Link></li>
-              <li><Link to="/courses/full-stack" className="text-gray-600 hover:text-red-700 transition">Full Stack Development</Link></li>
+              <li><Link to="/courses" className="text-gray-600 hover:text-red-700 transition">All Courses</Link></li>
+              <li><Link to="/courses/cloud" className="text-gray-600 hover:text-red-700 transition">Cloud</Link></li>
+              <li><Link to="/courses/cyber-security" className="text-gray-600 hover:text-red-700 transition">Cyber Security</Link></li>
+              <li><Link to="/courses/data-analytics-ai" className="text-gray-600 hover:text-red-700 transition">Data Analytics & AI</Link></li>
+              <li><Link to="/courses/networking" className="text-gray-600 hover:text-red-700 transition">Networking</Link></li>
             </ul>
           </div>
           <div>

@@ -20,6 +20,8 @@ export function CourseListingPage() {
     'Artificial Intelligence & Machine Learning',
     'Cloud Computing',
     'Cybersecurity',
+    'Data Analytics & AI',
+    'Networking',
     'DevOps',
     'Full Stack Development',
   ];
@@ -46,11 +48,22 @@ export function CourseListingPage() {
     const title = normalize(course.title);
     switch (categoryParam) {
       case 'Artificial Intelligence & Machine Learning':
-        return c.includes('data analytics') || title.includes('ai') || title.includes('machine') || title.includes('deep learning') || title.includes('ml');
+        return title.includes('ai') || title.includes('machine') || title.includes('deep learning') || title.includes('ml');
       case 'Cloud Computing':
         return c.includes('cloud');
       case 'Cybersecurity':
-        return c.includes('cyber');
+        return c.includes('cyber') || title.includes('security');
+      case 'Data Analytics & AI':
+        return (
+          c.includes('data') ||
+          c.includes('analytics') ||
+          title.includes('data') ||
+          title.includes('analytics') ||
+          title.includes('bi') ||
+          title.includes('sql')
+        );
+      case 'Networking':
+        return c.includes('network') || title.includes('network') || title.includes('ccna');
       case 'DevOps':
         return title.includes('devops') || title.includes('automation');
       case 'Full Stack Development':
