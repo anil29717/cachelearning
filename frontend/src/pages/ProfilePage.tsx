@@ -14,6 +14,9 @@ import { Label } from '../components/ui/label';
 import { BookOpen, Award, Settings, PlayCircle, Star, PenTool, Lock, CheckCircle, Clock, Edit } from 'lucide-react';
 import { toast } from 'sonner';
 import { StudentStoryForm } from '../components/StudentStoryForm';
+import { GamificationStats } from '../components/gamification/GamificationStats';
+import { BadgesList } from '../components/gamification/BadgesList';
+import { LeaderboardWidget } from '../components/gamification/LeaderboardWidget';
 
 export function ProfilePage() {
   const navigate = useNavigate();
@@ -26,6 +29,9 @@ export function ProfilePage() {
   const [phone, setPhone] = useState('');
   const [myStory, setMyStory] = useState<any>(null);
   const [isEditingStory, setIsEditingStory] = useState(false);
+  // Gamification State
+  const [gamificationProfile, setGamificationProfile] = useState<any>(null);
+  const [leaderboard, setLeaderboard] = useState<any[]>([]);
 
   useEffect(() => {
     if (!user) {
@@ -36,7 +42,20 @@ export function ProfilePage() {
     setPhone((user as any).phone || '');
     loadEnrollments();
     loadMyStory();
+    loadGamificationData();
   }, [user]);
+
+  const loadGamificationData = async () => {
+    try {
+      const profile = await apiClient.getGamificationProfile();
+      setGamificationProfile(profile);
+      
+      const lb = await apiClient.getLeaderboard();
+      setLeaderboard(lb.leaderboard);
+    } catch (error) {
+      console.error('Error loading gamification data:', error);
+    }
+  };
 
   const loadMyStory = async () => {
     try {
@@ -152,13 +171,45 @@ export function ProfilePage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Gamification Stats Section */}
+        {gamificationProfile && gamificationProfile.stats && (
+          <div className="mb-6">
+            <GamificationStats 
+              stats={{
+                total_xp: gamificationProfile.stats.total_xp,
+                level: gamificationProfile.stats.level,
+                current_streak: gamificationProfile.stats.current_streak
+              }}
+              nextLevelXp={gamificationProfile.nextLevelXp || 500}
+              rank={gamificationProfile.rank || 0}
+            />
+          </div>
+        )}
+
         <Tabs defaultValue="courses" className="space-y-5">
           <TabsList className="bg-red-50 border border-red-100">
             <TabsTrigger value="courses">My Courses</TabsTrigger>
             <TabsTrigger value="journey">My Journey</TabsTrigger>
+            <TabsTrigger value="achievements">Achievements</TabsTrigger>
             <TabsTrigger value="certificates">Certificates</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
           </TabsList>
+
+          {/* Achievements Tab */}
+          <TabsContent value="achievements">
+             <div className="grid md:grid-cols-3 gap-6">
+                <div className="md:col-span-2">
+
+                   {gamificationProfile && (
+                     <BadgesList badges={gamificationProfile.badges || []} />
+                   )}
+                </div>
+                <div>
+                   <LeaderboardWidget leaderboard={leaderboard} currentUserId={user.id} />
+                </div>
+             </div>
+          </TabsContent>
 
           {/* My Journey */}
           <TabsContent value="journey">

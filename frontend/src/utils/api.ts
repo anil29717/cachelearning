@@ -146,6 +146,10 @@ export class ApiClient {
     });
   }
 
+  async getCourseProgress(courseId: number | string) {
+    return this.request<{ completedLessonIds: number[] }>(`/progress/${String(courseId)}`);
+  }
+
   // Blogs
   async getBlogs(params?: { status?: 'published' | 'draft'; category?: string; author_id?: string }) {
     const queryParams = new URLSearchParams(params as any).toString();
@@ -314,6 +318,22 @@ export class ApiClient {
       method: 'PUT',
       body: JSON.stringify(data),
     });
+  }
+
+  // Gamification
+  async earnXp(action: 'video_watch' | 'lesson_complete' | 'quiz_pass' | 'daily_activity' | 'course_complete', referenceId?: string) {
+    return this.request<{ earned: boolean; xpAdded: number; totalXp: number; level: number; levelUp: boolean; streak: number; badges: string[] }>('/gamification/earn-xp', {
+      method: 'POST',
+      body: JSON.stringify({ action, referenceId }),
+    });
+  }
+
+  async getGamificationProfile() {
+    return this.request<{ stats: any; badges: any[]; rank: number; nextLevelXp: number }>('/gamification/me');
+  }
+
+  async getLeaderboard() {
+    return this.request<{ leaderboard: any[] }>('/gamification/leaderboard');
   }
 }
 

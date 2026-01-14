@@ -16,6 +16,7 @@ import adminPaymentRouter from './adminPaymentRoutes.js';
 import contactRouter from './contactRoutes.js';
 import blogsRouter from './blogsRoutes.js';
 import studentStoriesRouter from './studentStoriesRoutes.js';
+import gamificationRouter from './gamificationRoutes.js';
 import { initDb } from './db.js';
 import path from 'path';
 import http from 'http';
@@ -63,6 +64,7 @@ app.use('/api/webhook', webhookRouter);
 app.use('/api/contact', contactRouter);
 app.use('/api/blogs', blogsRouter);
 app.use('/api/student-stories', studentStoriesRouter);
+app.use('/api/gamification', gamificationRouter);
 
 // Initialize DB on demand
 app.post('/api/init-db', async (_req, res) => {

@@ -288,6 +288,69 @@ export async function initDb() {
   `;
   await pool.query(createBlogLikes);
 
+  const createGamification = `
+    CREATE TABLE IF NOT EXISTS user_gamification (
+      user_id INT PRIMARY KEY,
+      total_xp INT DEFAULT 0,
+      level INT DEFAULT 1,
+      current_streak INT DEFAULT 0,
+      longest_streak INT DEFAULT 0,
+      last_activity TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB;
+  `;
+  await pool.query(createGamification);
+
+  const createXpLogs = `
+    CREATE TABLE IF NOT EXISTS xp_logs (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      user_id INT NOT NULL,
+      action VARCHAR(50) NOT NULL,
+      reference_id VARCHAR(50),
+      xp INT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE KEY uniq_action (user_id, action, reference_id),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB;
+  `;
+  await pool.query(createXpLogs);
+
+  const createBadges = `
+    CREATE TABLE IF NOT EXISTS badges (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name VARCHAR(100) NOT NULL UNIQUE,
+      description TEXT,
+      icon VARCHAR(50)
+    ) ENGINE=InnoDB;
+  `;
+  await pool.query(createBadges);
+
+  const createUserBadges = `
+    CREATE TABLE IF NOT EXISTS user_badges (
+      user_id INT NOT NULL,
+      badge_id INT NOT NULL,
+      earned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      UNIQUE KEY uniq_user_badge (user_id, badge_id),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (badge_id) REFERENCES badges(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB;
+  `;
+  await pool.query(createUserBadges);
+
+  // Insert default badges if not exist
+  const badges = [
+    { name: 'First Lesson', description: 'Completed your first lesson', icon: 'check-circle' },
+    { name: '7-Day Streak', description: 'Maintained a 7-day learning streak', icon: 'flame' },
+    { name: 'Course Finisher', description: 'Completed a full course', icon: 'trophy' }
+  ];
+
+  for (const b of badges) {
+    await pool.query(
+      `INSERT IGNORE INTO badges (name, description, icon) VALUES (?, ?, ?)`,
+      [b.name, b.description, b.icon]
+    );
+  }
+
   const createStudentStories = `
     CREATE TABLE IF NOT EXISTS student_stories (
       id INT AUTO_INCREMENT PRIMARY KEY,

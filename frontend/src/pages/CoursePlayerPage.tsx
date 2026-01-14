@@ -22,11 +22,44 @@ export function CoursePlayerPage() {
   const [courseProgress, setCourseProgress] = useState(0);
   const [loading, setLoading] = useState(true);
   const [isEnrolled, setIsEnrolled] = useState(false);
+  const [videoXpEarned, setVideoXpEarned] = useState(false);
 
   useEffect(() => {
     loadCourse();
     checkEnrollment();
-  }, [id]);
+    loadProgress();
+    
+    // Daily Activity XP
+    const trackDailyActivity = async () => {
+       try {
+         const today = new Date().toISOString().split('T')[0];
+         const result = await apiClient.earnXp('daily_activity', today);
+         if (result.earned) {
+             toast.success(`+${result.xpAdded} XP: Daily Activity! 🔥`, {
+                 className: 'bg-orange-50 border-orange-200 text-orange-800'
+             });
+         }
+       } catch (err) {
+         // Ignore if already earned or error
+       }
+    };
+    if (user) trackDailyActivity();
+  }, [id, user]);
+
+  useEffect(() => {
+    // Reset video XP state when lesson changes
+    setVideoXpEarned(false);
+  }, [currentLesson]);
+
+  const loadProgress = async () => {
+    if (!id || !user) return;
+    try {
+      const { completedLessonIds } = await apiClient.getCourseProgress(id);
+      setCompletedLessons(new Set(completedLessonIds));
+    } catch (error) {
+      console.error('Error loading progress:', error);
+    }
+  };
 
   const loadCourse = async () => {
     try {
@@ -76,12 +109,44 @@ export function CoursePlayerPage() {
       setCourseProgress(progress);
       toast.success('Lesson marked as complete');
 
+      // Gamification: Earn XP
+      try {
+        const xpResult = await apiClient.earnXp('lesson_complete', `lesson_${currentLesson.id}`);
+        if (xpResult.earned) {
+          toast.success(`+${xpResult.xpAdded} XP!`, {
+             description: 'Lesson Completed',
+             className: 'bg-yellow-50 border-yellow-200 text-yellow-800'
+          });
+          
+          if (xpResult.levelUp) {
+            toast.success(`LEVEL UP! You reached Level ${xpResult.level}! 🚀`, {
+                duration: 5000,
+                className: 'bg-purple-100 border-purple-200 text-purple-800 font-bold'
+            });
+          }
+        }
+      } catch (err) {
+        console.error('XP Error', err);
+      }
+
       // Move to next lesson
       const currentIndex = lessons.findIndex(l => l.id === currentLesson.id);
       if (currentIndex < lessons.length - 1) {
         setCurrentLesson(lessons[currentIndex + 1]);
       } else {
         toast.success('Congratulations! You completed the course!');
+        // Gamification: Course Complete
+        try {
+            const xpResult = await apiClient.earnXp('course_complete', `course_${id}`);
+            if (xpResult.earned) {
+                toast.success(`+${xpResult.xpAdded} XP!`, {
+                    description: 'Course Completed! Badge Unlocked?',
+                    className: 'bg-yellow-50 border-yellow-200 text-yellow-800'
+                });
+            }
+        } catch (err) {
+            console.error('Course XP Error', err);
+        }
       }
     } catch (error) {
       console.error('Error updating progress:', error);
@@ -91,6 +156,22 @@ export function CoursePlayerPage() {
 
   const handleLessonSelect = (lesson: Lesson) => {
     setCurrentLesson(lesson);
+  };
+
+  const handleVideoProgress = async (currentTime: number, duration: number) => {
+     if (!videoXpEarned && duration > 0 && (currentTime / duration) >= 0.9) {
+        setVideoXpEarned(true);
+        try {
+            const xpResult = await apiClient.earnXp('video_watch', `video_${currentLesson?.id}`);
+            if (xpResult.earned) {
+                toast.success(`+${xpResult.xpAdded} XP: Video Watched! 🎥`, {
+                    className: 'bg-blue-50 border-blue-200 text-blue-800'
+                });
+            }
+        } catch (err) {
+            console.error('Video XP Error', err);
+        }
+     }
   };
 
   if (loading) {
@@ -158,6 +239,7 @@ export function CoursePlayerPage() {
                     url={currentLesson.video_url}
                     title={currentLesson.title}
                     posterUrl={course.thumbnail_url}
+                    onProgress={handleVideoProgress}
                   />
                 )}
               </CardContent>
@@ -203,20 +285,26 @@ export function CoursePlayerPage() {
                   {lessons.map((lesson, index) => {
                     const isComplete = completedLessons.has(lesson.id);
                     const isCurrent = currentLesson?.id === lesson.id;
+                    const isLocked = index > 0 && !completedLessons.has(lessons[index - 1].id);
 
                     return (
                       <button
                         key={lesson.id}
-                        onClick={() => handleLessonSelect(lesson)}
+                        disabled={isLocked}
+                        onClick={() => !isLocked && handleLessonSelect(lesson)}
                         className={`w-full text-left p-3 rounded-lg transition-colors ${
                           isCurrent
                             ? 'bg-blue-100 border-2 border-blue-500'
-                            : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
+                            : isLocked
+                              ? 'bg-gray-100 opacity-60 cursor-not-allowed'
+                              : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
                         }`}
                       >
                         <div className="flex items-start gap-3">
                           <div className="flex-shrink-0 mt-1">
-                            {isComplete ? (
+                            {isLocked ? (
+                              <Lock className="h-5 w-5 text-gray-400" />
+                            ) : isComplete ? (
                               <CheckCircle className="h-5 w-5 text-green-600" />
                             ) : isCurrent ? (
                               <PlayCircle className="h-5 w-5 text-blue-600" />
@@ -235,6 +323,9 @@ export function CoursePlayerPage() {
                                 </span>
                               )}
                             </div>
+                            {isLocked && (
+                               <p className="text-xs text-red-500 mt-1">Complete previous lesson to unlock</p>
+                            )}
                           </div>
                         </div>
                       </button>

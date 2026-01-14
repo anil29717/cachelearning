@@ -121,6 +121,24 @@ export function HomePage() {
   return (
     <div className="min-h-screen bg-white">
       <HeroCarousel />
+      
+      {/* Gamification Highlight Banner */}
+      <div className="bg-slate-900 text-white py-4 border-b border-slate-800">
+        <div className="container mx-auto px-4 flex flex-wrap items-center justify-center gap-6 md:gap-12 text-sm md:text-base font-medium">
+          <div className="flex items-center gap-2">
+            <Star className="h-5 w-5 text-yellow-400" />
+            <span>Earn XP for Learning</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="h-5 w-5 flex items-center justify-center">🔥</div>
+            <span>Maintain Daily Streaks</span>
+          </div>
+          <div className="flex items-center gap-2">
+             <Award className="h-5 w-5 text-purple-400" />
+             <span>Unlock Exclusive Badges</span>
+          </div>
+        </div>
+      </div>
 
       {loading ? (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
